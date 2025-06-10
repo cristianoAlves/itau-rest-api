@@ -16,17 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "/transacao", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/transacao", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TransactionController {
 
     private final ValidationService validationService;
     private final TransactionService transactionService;
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> addTransaction(@RequestBody TransactionBody transactionBody) {
 
         try {
-            System.out.println(transactionBody);
             validationService.validate(transactionBody);
         } catch (ValidationException e) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();

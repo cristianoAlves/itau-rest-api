@@ -1,9 +1,13 @@
 package com.itau.example.domain.dto;
 
 import java.util.DoubleSummaryStatistics;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 public class StatisticsDto {

@@ -20,10 +20,13 @@ public class ValidationService {
     private final ValidatorFactory<TransactionBody> validatorFactory;
 
     public void validate(final TransactionBody transactionBody) throws ValidationException {
+
         List<RequestValidator<TransactionBody>> validators = List.of(
+            validatorFactory.createValidator(Objects::isNull, "Body cannot be null"),
+            validatorFactory.createValidator(r -> Objects.isNull(r.getDataHora()), "Data-hora cannot be null"),
+            validatorFactory.createValidator(r -> Objects.isNull(r.getValor()), "valor cannot be null"),
             validatorFactory.createValidator(r -> r.getDataHora().isAfter(OffsetDateTime.now()), "Data-hora should be before actual time"),
-            validatorFactory.createValidator(r -> r.getValor().compareTo(BigDecimal.ZERO) < 0, "valor should be >= zero"),
-            validatorFactory.createValidator(Objects::isNull, "Body cannot be null")
+            validatorFactory.createValidator(r -> r.getValor().compareTo(BigDecimal.ZERO) < 0, "valor should be >= zero")
         );
 
         for (RequestValidator<TransactionBody> requestValidator : validators) {

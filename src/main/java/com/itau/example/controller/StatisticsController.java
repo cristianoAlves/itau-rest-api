@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "/estatistica", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/estatistica", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StatisticsController {
 
     private final StatisticsService statisticsService;

@@ -24,11 +24,11 @@ public class StatisticsService {
 
     public StatisticsDto getStatisticsFromLast60Seconds() {
         OffsetDateTime now = OffsetDateTime.now();
-        OffsetDateTime oneMinuteAgo = now.minusMinutes(interval);
-        log.info("Getting transactions from last 60 seconds, starting on : [{}]", oneMinuteAgo);
+        OffsetDateTime timeAgo = now.minusMinutes(interval);
+        log.info("Getting transactions from last [{}] minutes, starting on : [{}]", timeAgo, now);
 
         BigDecimal[] array = transactionRepository.getAllTransactions().stream()
-            .filter(t -> t.getDataHora().isBefore(oneMinuteAgo) && !t.getDataHora().isAfter(now))
+            .filter(t -> t.getDataHora().isBefore(timeAgo) && !t.getDataHora().isAfter(now))
             .map(TransactionEntity::getValor).toArray(BigDecimal[]::new);
 
         DoubleStream doubleStream = Arrays.stream(array).mapToDouble(BigDecimal::doubleValue);
