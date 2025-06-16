@@ -27,10 +27,7 @@ class TransactionsApplicationTest {
 
     @Test
     void shouldAddTransactionOk() {
-        TransactionBody payload = TransactionBody.builder()
-            .valor(new BigDecimal(100))
-            .dataHora(OffsetDateTime.now())
-            .build();
+        TransactionBody payload = createTransaction(100, OffsetDateTime.now());
 
         var response = testRestTemplate.postForEntity("/transacao", payload, Map.class);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -38,10 +35,7 @@ class TransactionsApplicationTest {
 
     @Test
     void shouldGetErrorWhenAddingTransactionWithFutureDates() {
-        TransactionBody payload = TransactionBody.builder()
-            .valor(new BigDecimal(100))
-            .dataHora(OffsetDateTime.now().plusMinutes(1))
-            .build();
+        TransactionBody payload = createTransaction(100, OffsetDateTime.now().plusMinutes(1));
 
         var response = testRestTemplate.postForEntity("/transacao", payload, Map.class);
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -49,10 +43,7 @@ class TransactionsApplicationTest {
 
     @Test
     void shouldGetErrorWhenAddingTransactionWithNegativeValue() {
-        TransactionBody payload = TransactionBody.builder()
-            .valor(new BigDecimal(-100))
-            .dataHora(OffsetDateTime.now())
-            .build();
+        TransactionBody payload = createTransaction(-100, OffsetDateTime.now());
 
         var response = testRestTemplate.postForEntity("/transacao", payload, Map.class);
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -74,10 +65,7 @@ class TransactionsApplicationTest {
 
     @Test
     void shouldDeleteAllTransactions() {
-        TransactionBody payload = TransactionBody.builder()
-            .valor(new BigDecimal(100))
-            .dataHora(OffsetDateTime.now())
-            .build();
+        TransactionBody payload = createTransaction(100, OffsetDateTime.now());
 
         testRestTemplate.postForEntity("/transacao", payload, Map.class);
         testRestTemplate.postForEntity("/transacao", payload, Map.class);
@@ -91,5 +79,12 @@ class TransactionsApplicationTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         verify(transactionService).removeAll();
+    }
+
+    private static TransactionBody createTransaction(int val, OffsetDateTime now) {
+        return TransactionBody.builder()
+            .valor(new BigDecimal(val))
+            .dataHora(now)
+            .build();
     }
 }

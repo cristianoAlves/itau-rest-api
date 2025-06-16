@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-@Slf4j
 public class ValidationService {
 
     private final ValidatorFactory<TransactionBody> validatorFactory;
